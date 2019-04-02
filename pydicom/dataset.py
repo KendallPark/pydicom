@@ -1438,7 +1438,10 @@ class FileDataset(Dataset):
             self.filename = filename_or_obj
             self.fileobj_type = open
         elif isinstance(filename_or_obj, io.BufferedReader):
-            self.filename = filename_or_obj.name
+            if getattr(filename_or_obj, "name", False):
+                self.filename = filename_or_obj.name
+            else:
+                self.filename = None
             # This is the appropriate constructor for io.BufferedReader
             self.fileobj_type = open
         else:
